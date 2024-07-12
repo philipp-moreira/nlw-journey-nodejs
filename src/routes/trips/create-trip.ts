@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "../../lib/prisma";
 
 import nodemailer from "nodemailer";
+import { ClientError } from "../../errors/client-error";
 import { dayjs } from "../../lib/dayjs";
 import { getEmailClient } from "../../lib/mail";
 
@@ -33,13 +34,13 @@ export async function createTrip(app: FastifyInstance) {
       } = request.body;
 
       if (dayjs(starts_at).isBefore(new Date())) {
-        throw new Error(
+        throw new ClientError(
           "The start date of the trip must be equal to or greater than today."
         );
       }
 
       if (dayjs(ends_at).isBefore(starts_at)) {
-        throw new Error(
+        throw new ClientError(
           "The end date of the trip must be greater than starts date."
         );
       }

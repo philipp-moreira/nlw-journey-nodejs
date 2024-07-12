@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
+import { ClientError } from "../../errors/client-error";
 import { dayjs } from "../../lib/dayjs";
 import { prisma } from "../../lib/prisma";
 
@@ -29,15 +30,15 @@ export async function createActivity(app: FastifyInstance) {
       });
 
       if (!trip) {
-        throw new Error("Trip not found.");
+        throw new ClientError("Trip not found.");
       }
 
       if (dayjs(occurs_at).isBefore(trip.starts_at)) {
-        throw new Error(`Activity's date out of  trip period.`);
+        throw new ClientError(`Activity's date out of  trip period.`);
       }
 
       if (dayjs(occurs_at).isAfter(trip.ends_at)) {
-        throw new Error(`Activity's date out of  trip period.`);
+        throw new ClientError(`Activity's date out of  trip period.`);
       }
 
       const activity = await prisma.activity.create({
