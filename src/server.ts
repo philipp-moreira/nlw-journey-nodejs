@@ -16,9 +16,9 @@ import { createTrip } from "./routes/trips/create-trip";
 import { getTripDetails } from "./routes/trips/get-trip-details";
 import { updateTrip } from "./routes/trips/update-trip";
 import { getParticipant } from "./routes/participants/get-participant";
+import { env } from "./env";
 
 const app = fastify();
-const appPort = 3333;
 
 // Add schema validator and serializer
 app.setValidatorCompiler(validatorCompiler);
@@ -40,6 +40,6 @@ app.register(getLinks);
 app.register(getParticipants);
 app.register(createInvite);
 
-app.listen({ port: appPort }).then(() => {
-  console.log(`Server is running on ${appPort}`);
+app.listen({ port: env.PORT }).then(() => {
+  console.log(`Server is running on ${env.PORT}`);
 });
